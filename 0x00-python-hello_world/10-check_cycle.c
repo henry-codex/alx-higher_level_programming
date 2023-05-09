@@ -1,23 +1,36 @@
+/*
+ * File: 10-check_cycle.c
+ * Auth: Brennan D Baraban
+ */
+
+#include <stdlib.h>
 #include "lists.h"
+
 /**
- * check_cycle - Check if a loop exists in the linked list
- * @list: Is the pointer to the head of the linked list
- * Return: 1 if a loop exists or 0 if it does not
+ * check_cycle - Checks if a singly-linked list contains a cycle.
+ * @list: A singly-linked list.
+ *
+ * Return: If there is no cycle - 0.
+ *         If there is a cycle - 1.
  */
 int check_cycle(listint_t *list)
 {
-	listint_t *slow_p = list;
-	listint_t *fast_p = list;
+	listint_t *turtle, *hare;
 
-	while (slow_p != NULL && fast_p != NULL && fast_p->next != NULL)
+	if (list == NULL || list->next == NULL)
+		return (0);
+
+	turtle = list->next;
+	hare = list->next->next;
+
+	while (turtle && hare && hare->next)
 	{
-		slow_p = slow_p->next;
-		fast_p = fast_p->next->next;
-
-		if (slow_p == fast_p)
+		if (turtle == hare)
 			return (1);
+
+		turtle = turtle->next;
+		hare = hare->next->next;
 	}
 
 	return (0);
 }
-
