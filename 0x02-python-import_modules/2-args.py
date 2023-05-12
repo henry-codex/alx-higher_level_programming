@@ -1,23 +1,13 @@
 #!/usr/bin/python3
 
-from sys import argv
-
-
-def principal():
-    """
-    Prints the number and value of arguments passed to the script.
-    """
-    print('{} argument'.format(len(argv) - 1), end='')
+if __name__ == '__main__':
+    from sys import argv
     if len(argv) == 1:
-        print('s.')
+        print('0 arguments.')
     elif len(argv) == 2:
-        print(':')
+        print('1 argument:\n1: {}'.format(argv[1]))
     else:
-        print('s:')
-    for i in range(1, len(argv)):
-        print('{}: {}'.format(i, argv[i]))
-
-
-if __name__ == "__main__":
-    principal()
+        print('{:d} arguments:'.format(len(argv) - 1))
+        for ind in range(1, len(argv)):
+            print('{}: {}'.format(ind, argv[ind]))
 
