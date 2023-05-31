@@ -1,5 +1,9 @@
 #!/usr/bin/python3
-
+"""Square module.
+This module contains a class that defines a square and init method that
+sets its size and checking if the given values are right. There's also an
+area method that returns the area of the square.
+"""
 class Square:
     """
     This class represents a square.
