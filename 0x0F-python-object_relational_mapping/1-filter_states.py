@@ -1,31 +1,31 @@
 #!/usr/bin/python3
-'''
-Create a conection and list states with
-capital N
-'''
-import sys
+'''script for task 1'''
+
 import MySQLdb
+import sys
 
 
-def mysqlconnect():
-    db_connection = None
-    db_connection = MySQLdb.connect(
-        user=sys.argv[1],
-        passwd=sys.argv[2],
-        db=sys.argv[3],
-        port=3306
-    )
+def list_N():
+    '''lists all states with a name that starts with N'''
+    username = sys.argv[1]
+    password = sys.argv[2]
+    db_name = sys.argv[3]
+    host = 'localhost'
+    port = 3306
 
-    cursor = db_connection.cursor()
-    cursor.execute("SELECT * FROM states WHERE name LIKE 'N%'"
-                   "COLLATE Latin1_General_CS;")
-    states = cursor.fetchall()
+    db = MySQLdb.connect(host=host, user=username, passwd=password,
+                         db=db_name, port=port)
+    cur = db.cursor()
+    cur.execute('SELECT * FROM states WHERE name regexp "^N.*" ' +
+                'ORDER BY states.id ASC')
+    result = cur.fetchall()
+    cur.close()
+    db.close()
+    if result:
+        for row in result:
+            if row[1][0] == "N":
+                print(row)
 
-    for state in states:
-        print(state)
 
-    cursor.close()
-    db_connection.close()
-
-if __name__ == '__main__':
-    mysqlconnect()
+if __name__ == "__main__":
+    list_N()

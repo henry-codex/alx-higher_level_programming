@@ -1,28 +1,32 @@
 #!/usr/bin/python3
-'''lists all cities of that state'''
+'''script for task 5'''
+
 import MySQLdb
 import sys
 
 
-def mysqlconnect():
-    db_connection = None
-    db_connection = MySQLdb.connect(
-        user=sys.argv[1],
-        passwd=sys.argv[2],
-        db=sys.argv[3],
-        port=3306
-    )
+def list_by_state():
+    '''lists all cities of a state passed as argument to the script'''
+    username = sys.argv[1]
+    password = sys.argv[2]
+    db_name = sys.argv[3]
+    state_name = sys.argv[4]
+    host = 'localhost'
+    port = 3306
 
-    cursor = db_connection.cursor()
-    cursor.execute("SELECT cities.name FROM cities"
-                   " INNER JOIN states ON cities.state_id = states.id WHERE"
-                   " states.name = %s", (sys.argv[4], ))
-    cities = cursor.fetchall()
+    db = MySQLdb.connect(host=host, user=username, passwd=password,
+                         db=db_name, port=port)
+    cur = db.cursor()
+    cur.execute('SELECT c.name FROM cities c INNER JOIN states s ' +
+                'ON s.id = c.state_id WHERE ' +
+                'BINARY s.name = %s ' +
+                'ORDER BY c.id ASC;', [state_name])
+    result = cur.fetchall()
+    cur.close()
+    db.close()
 
-    print(', '.join(city[0] for city in cities))
+    print(', '.join(map(lambda x: x[0], result)))
 
-    cursor.close()
-    db_connection.close()
 
 if __name__ == '__main__':
-    mysqlconnect()
+    list_by_state()
