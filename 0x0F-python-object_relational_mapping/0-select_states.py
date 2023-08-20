@@ -1,26 +1,30 @@
 #!/usr/bin/env python3
 
-'''Connect to the database'''
+'''Connect to the database and list all states'''
+
 import MySQLdb
 import sys
 
-def mysqlconnect():
-    if len(sys.argv) != 4:
-        print("Usage: {} <username> <password> <database>".format(sys.argv[0]))
-        sys.exit(1)
+def list_states():
+    db_connection = None
 
     try:
+        # Connect to the MySQL server
         db_connection = MySQLdb.connect(
             user=sys.argv[1],
             passwd=sys.argv[2],
             db=sys.argv[3],
-            port=3306
+            port=3306,
+            host='localhost'
         )
 
         cursor = db_connection.cursor()
-        cursor.execute("SELECT * FROM states")
+
+        # Execute the SELECT query to retrieve states
+        cursor.execute("SELECT * FROM states ORDER BY id ASC")
         states = cursor.fetchall()
 
+        # Display the states
         for state in states:
             print(state)
 
@@ -33,4 +37,8 @@ def mysqlconnect():
             db_connection.close()
 
 if __name__ == '__main__':
-    mysqlconnect()
+    if len(sys.argv) != 4:
+        print("Usage: {} <username> <password> <database>".format(sys.argv[0]))
+        sys.exit(1)
+
+    list_states()
